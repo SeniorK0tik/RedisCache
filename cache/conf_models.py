@@ -22,10 +22,10 @@ class RedisConfModel(BaseModel):
 
 def build_dsn(conf: RedisConfModel) -> str:
     """Построит полный адрес до Redis"""
-    if conf.redis_pass:
-        return f"redis://:{conf.redis_pass}@{conf.redis_url}:{conf.redis_port}/{conf.redis_db}"
+    if conf.passw:
+        return f"redis://:{conf.passw}@{conf.url}:{conf.port}/{conf.db_num}"
 
-    return f"redis://{conf.redis_url}:{conf.redis_port}/{conf.redis_db}"
+    return f"redis://{conf.url}:{conf.port}/{conf.db_num}"
 
 
 def build_redis_client(conf: RedisConfModel) -> Redis:
