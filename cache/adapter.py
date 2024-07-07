@@ -30,6 +30,18 @@ class Cache:
     async def set(self, key: str, value: Any, ex: int | None = None) -> None:
         await self.client.set(name=str(key), value=value, ex=ex)
 
+    async def append_to_set(self, key: str, value: Any) -> None:
+        """Добавить значение к множеству"""
+        await self.client.sadd(key, value)
+
+    async def get_set(self, key: str) -> set:
+        """Возвращает полное множество"""
+        return await self.client.smembers(key)
+
+    async def check_in_set(self, key: str, value: Any) -> bool:
+        """Проверяет присутствие элемента в множестве"""
+        return bool(await self.client.sismember(key, str(value)))
+
     async def exists(self, keys: str | List[str]) -> bool:
         match keys:
             case str():
