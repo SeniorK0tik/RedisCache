@@ -1,6 +1,7 @@
 from typing import Any, List
 
 from redis.asyncio.client import Redis
+from redis.typing import FieldT
 
 from cache.conf_models import RedisConfModel, build_redis_client
 
@@ -30,9 +31,13 @@ class Cache:
     async def set(self, key: str, value: Any, ex: int | None = None) -> None:
         await self.client.set(name=str(key), value=value, ex=ex)
 
-    async def append_to_set(self, key: str, value: Any) -> None:
+    async def append_to_set(self, key: str, value: FieldT) -> None:
         """Добавить значение к множеству"""
         await self.client.sadd(key, value)
+
+    async def remove_from_set(self, key: str, value: FieldT) -> None:
+        """Удаляет значение из множества"""
+        await self.client.srem(key, value)
 
     async def get_set(self, key: str) -> set:
         """Возвращает полное множество"""
